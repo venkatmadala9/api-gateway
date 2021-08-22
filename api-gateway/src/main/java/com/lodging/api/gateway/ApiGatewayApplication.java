@@ -9,10 +9,12 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @SpringBootApplication
 @EnableEurekaClient
+@CrossOrigin(origins = "http://localhost:4200")
 public class ApiGatewayApplication {
 
 	public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class ApiGatewayApplication {
 	@Bean
 	public RouteLocator routeLocator(RouteLocatorBuilder routeLocatorBuilder)
 	{
-		return routeLocatorBuilder.routes().route("USER", r -> r.path("/user/**").uri("lb://USER-SERVICE"))
+		return routeLocatorBuilder.routes().route("USER", r -> r.path("/user/**","/api/auth/**").uri("lb://USER-SERVICE"))
 											.route("HOTEL", r -> r.path("/hotel/**").uri("lb://HOTEL-SERVICE"))
 											.build();
 	}
